@@ -125,6 +125,8 @@ function main(){
         hour = today.getHours(),
 		sec = Math.floor(Math.random()*180);
     let checkType = 'checkin';
+	if(month<10) month = '0'+ month;
+	if(day<10)   day   ='0'+ day;
     if(hour>=18 && hour<24){
         checkType = 'checkout';
     }
