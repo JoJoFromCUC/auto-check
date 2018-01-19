@@ -5,6 +5,7 @@ let querystring = require('querystring');
 let cheerio = require('cheerio');
 let superagent = require('superagent');
 let schedule = require('node-schedule');
+let nodemailer = require('nodemailer');
 
 const users = [
     {
@@ -16,6 +17,22 @@ const users = [
         password:'xxxxxx'
     }
 ];
+let transporter = nodemailer.createTransport({
+	host: 'pop.cstnet.cn',
+	port: 995,
+	secure:true,
+	auth:{
+		user: users[0].userName,
+		pass: users[0].password
+	}
+});
+
+let checkMailOptions = {
+	from :'god@sccas.cn',
+	to: users[0].userName,users[1].userName,
+	subject: 'auto record message',
+	text: "auto check successed. "
+};
 const signInHead = querystring.stringify({
     'response_type': 'code',
     'redirect_uri': 'http://159.226.29.10/CnicCheck/testtoken',
@@ -141,6 +158,12 @@ function main(){
 				users.forEach(function(user){
 					let userForm = initUser(user);
 					mock(userForm,checkType);
+					transporter.sendMail(checkMailOptions,(err,info)=>{
+						if(err){
+							console.log(err);
+						}
+						console.log('Message sent:%s',info.messageId);
+					});
 				});
 			}
 			else{
@@ -150,7 +173,13 @@ function main(){
 					users.forEach(function(user){
 						let userForm = initUser(user);
 						mock(userForm,checkType);
-					})
+						transporter.sendMail(checkMailOptions,(err,info)=>{
+							if(err){
+								console.log(err);
+							}
+							console.log('Message sent:%s',info.messageId);
+						});
+					});
 				}
 			}
 		});
