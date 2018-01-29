@@ -113,7 +113,7 @@ function mock(user,checktype){
             token = temp['token'];
             console.log(token);     
         });
-    },2000); 
+    },5000); 
     
     let mainUrl = '159.226.29.10',
         posUrl = '/CnicCheck/CheckServlet?weidu=39.97943495591847&jingdu=116.32850166009715';
